@@ -1,965 +1,1443 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>cURL Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:       #0D0D0D;
-  --surface:  #141414;
-  --surface2: #1A1A1A;
-  --surface3: #202020;
-  --border:   #2A2A2A;
-  --border2:  #333;
-  --accent:   #00D084;
-  --accent2:  #00A868;
-  --accent-dim:#003D26;
-  --blue:     #4D9EFF;
-  --blue-dim: #0D2A4D;
-  --orange:   #FF8C42;
-  --red:      #FF5C5C;
-  --yellow:   #FFD166;
-  --purple:   #B69DF8;
-  --text:     #E8E8E8;
-  --text2:    #888;
-  --text3:    #555;
-  --mono:     'JetBrains Mono', monospace;
-  --sans:     'Outfit', sans-serif;
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cURL Generator</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0d0d0d;
+        --surface: #141414;
+        --surface2: #1a1a1a;
+        --surface3: #202020;
+        --border: #2a2a2a;
+        --border2: #333;
+        --accent: #00d084;
+        --accent2: #00a868;
+        --accent-dim: #003d26;
+        --blue: #4d9eff;
+        --blue-dim: #0d2a4d;
+        --orange: #ff8c42;
+        --red: #ff5c5c;
+        --yellow: #ffd166;
+        --purple: #b69df8;
+        --text: #e8e8e8;
+        --text2: #888;
+        --text3: #555;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Outfit", sans-serif;
+      }
 
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior: smooth; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width:6px; height:6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background: #444; }
+      /* ── Scrollbar ── */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border2);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #444;
+      }
 
-/* ── Topbar ── */
-.topbar {
-  height: 48px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-.topbar-dots { display:flex; gap:6px; }
-.dot { width:11px; height:11px; border-radius:50%; }
-.dot.r{background:#FF5F57;} .dot.y{background:#FFBD2E;} .dot.g{background:#28C840;}
-.topbar-title {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--text2);
-  flex: 1;
-  text-align: center;
-  letter-spacing: 0.05em;
-}
-.topbar-title span { color: var(--accent); }
-.topbar-version {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  background: var(--surface3);
-  border: 1px solid var(--border);
-  padding: 2px 8px;
-  border-radius: 4px;
-}
+      /* ── Topbar ── */
+      .topbar {
+        height: 48px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .topbar-dots {
+        display: flex;
+        gap: 6px;
+      }
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .dot.r {
+        background: #ff5f57;
+      }
+      .dot.y {
+        background: #ffbd2e;
+      }
+      .dot.g {
+        background: #28c840;
+      }
+      .topbar-title {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--text2);
+        flex: 1;
+        text-align: center;
+        letter-spacing: 0.05em;
+      }
+      .topbar-title span {
+        color: var(--accent);
+      }
+      .topbar-version {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text3);
+        background: var(--surface3);
+        border: 1px solid var(--border);
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
 
-/* ── Layout ── */
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  flex: 1;
-  min-height: calc(100vh - 48px);
-}
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-}
+      /* ── Layout ── */
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        flex: 1;
+        min-height: calc(100vh - 48px);
+      }
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
 
-/* ── Panel ── */
-.panel {
-  padding: 24px;
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  max-height: calc(100vh - 48px);
-}
-.panel.output-panel {
-  border-right: none;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  position: sticky;
-  top: 48px;
-  align-self: start;
-  max-height: calc(100vh - 48px);
-  overflow-y: auto;
-}
+      /* ── Panel ── */
+      .panel {
+        padding: 24px;
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        max-height: calc(100vh - 48px);
+      }
+      .panel.output-panel {
+        border-right: none;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: sticky;
+        top: 48px;
+        align-self: start;
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+      }
 
-/* ── Section ── */
-.section {
-  margin-bottom: 24px;
-}
-.section-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
+      /* ── Section ── */
+      .section {
+        margin-bottom: 24px;
+      }
+      .section-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
 
-/* ── Method + URL row ── */
-.url-row {
-  display: flex;
-  gap: 8px;
-  align-items: stretch;
-}
+      /* ── Method + URL row ── */
+      .url-row {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+      }
 
-/* ── Method pill ── */
-.method-select {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 0 14px;
-  border-radius: 6px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--accent);
-  cursor: pointer;
-  outline: none;
-  letter-spacing: 0.05em;
-  appearance: none;
-  -webkit-appearance: none;
-  min-width: 90px;
-  text-align: center;
-}
-.method-select:focus { border-color: var(--accent); }
-.method-select.GET    { color: var(--accent); }
-.method-select.POST   { color: var(--blue); }
-.method-select.PUT    { color: var(--orange); }
-.method-select.PATCH  { color: var(--yellow); }
-.method-select.DELETE { color: var(--red); }
+      /* ── Method pill ── */
+      .method-select {
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 0 14px;
+        border-radius: 6px;
+        border: 1px solid var(--border2);
+        background: var(--surface2);
+        color: var(--accent);
+        cursor: pointer;
+        outline: none;
+        letter-spacing: 0.05em;
+        appearance: none;
+        -webkit-appearance: none;
+        min-width: 90px;
+        text-align: center;
+      }
+      .method-select:focus {
+        border-color: var(--accent);
+      }
+      .method-select.GET {
+        color: var(--accent);
+      }
+      .method-select.POST {
+        color: var(--blue);
+      }
+      .method-select.PUT {
+        color: var(--orange);
+      }
+      .method-select.PATCH {
+        color: var(--yellow);
+      }
+      .method-select.DELETE {
+        color: var(--red);
+      }
 
-/* ── Inputs ── */
-input[type=text], input[type=password], input[type=number], textarea, select {
-  width: 100%;
-  padding: 9px 12px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.15s;
-}
-input:focus, textarea:focus, select:focus { border-color: var(--accent-dim); box-shadow: 0 0 0 2px rgba(0,208,132,0.08); }
-input::placeholder, textarea::placeholder { color: var(--text3); }
-select { cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23555' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+      /* ── Inputs ── */
+      input[type="text"],
+      input[type="password"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 9px 12px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--accent-dim);
+        box-shadow: 0 0 0 2px rgba(0, 208, 132, 0.08);
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--text3);
+      }
+      select {
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23555' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 28px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+        line-height: 1.6;
+      }
 
-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+      /* ── Input row (key:value) ── */
+      .kv-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 6px;
+        margin-bottom: 6px;
+        align-items: center;
+        animation: slideIn 0.15s ease;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-/* ── Input row (key:value) ── */
-.kv-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 6px;
-  margin-bottom: 6px;
-  align-items: center;
-  animation: slideIn 0.15s ease;
-}
-.kv-row.triple { grid-template-columns: auto 1fr 1fr auto; }
-@keyframes slideIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+      .btn-remove {
+        width: 28px;
+        height: 28px;
+        border-radius: 5px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        color: var(--text3);
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        flex-shrink: 0;
+      }
+      .btn-remove:hover {
+        border-color: var(--red);
+        color: var(--red);
+        background: rgba(255, 92, 92, 0.08);
+      }
 
-.btn-remove {
-  width: 28px; height: 28px;
-  border-radius: 5px;
-  border: 1px solid var(--border);
-  background: var(--surface2);
-  color: var(--text3);
-  cursor: pointer;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
-.btn-remove:hover { border-color: var(--red); color: var(--red); background: rgba(255,92,92,0.08); }
+      .btn-add {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 5px;
+        border: 1px dashed var(--border2);
+        background: transparent;
+        color: var(--text3);
+        font-family: var(--mono);
+        font-size: 11px;
+        cursor: pointer;
+        transition: all 0.15s;
+        margin-top: 4px;
+      }
+      .btn-add:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-dim);
+      }
 
-.btn-add {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 5px;
-  border: 1px dashed var(--border2);
-  background: transparent;
-  color: var(--text3);
-  font-family: var(--mono);
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.15s;
-  margin-top: 4px;
-}
-.btn-add:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+      /* ── Auth section ── */
+      .auth-type-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .auth-pill {
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border2);
+        background: var(--surface2);
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text2);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .auth-pill:hover {
+        border-color: var(--blue);
+        color: var(--blue);
+      }
+      .auth-pill.active {
+        background: var(--blue-dim);
+        border-color: var(--blue);
+        color: var(--blue);
+        font-weight: 600;
+      }
+      .auth-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        animation: slideIn 0.15s ease;
+      }
+      .auth-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
 
-/* ── Auth section ── */
-.auth-type-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
-.auth-pill {
-  padding: 5px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.auth-pill:hover { border-color: var(--blue); color: var(--blue); }
-.auth-pill.active { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); font-weight:600; }
-.auth-fields { display:flex; flex-direction:column; gap:6px; animation: slideIn 0.15s ease; }
-.auth-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+      /* ── Body type tabs ── */
+      .body-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 10px;
+      }
+      .body-tab {
+        padding: 5px 12px;
+        border-radius: 5px;
+        border: 1px solid var(--border);
+        background: transparent;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text3);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .body-tab:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+      .body-tab.active {
+        background: var(--surface3);
+        border-color: var(--border2);
+        color: var(--text);
+      }
 
-/* ── Body type tabs ── */
-.body-tabs { display:flex; gap:4px; margin-bottom:10px; }
-.body-tab {
-  padding: 5px 12px;
-  border-radius: 5px;
-  border: 1px solid var(--border);
-  background: transparent;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.body-tab:hover { color: var(--text); border-color: var(--border2); }
-.body-tab.active { background: var(--surface3); border-color: var(--border2); color: var(--text); }
+      /* ── Options checkboxes ── */
+      .options-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .option-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .option-item:hover {
+        border-color: var(--border2);
+      }
+      .option-item input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        accent-color: var(--accent);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .option-item label {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text2);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .option-item input[type="number"] {
+        width: 52px;
+        padding: 2px 6px;
+        font-size: 11px;
+      }
 
-/* ── Options checkboxes ── */
-.options-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-.option-item {
-  display:flex; align-items:center; gap:8px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--surface2);
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.option-item:hover { border-color: var(--border2); }
-.option-item input[type=checkbox] {
-  width:14px; height:14px;
-  accent-color: var(--accent);
-  cursor:pointer; flex-shrink:0;
-}
-.option-item label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.option-item input[type=number] {
-  width: 52px;
-  padding: 2px 6px;
-  font-size: 11px;
-}
+      /* ── Output panel ── */
+      .output-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2px;
+      }
+      .output-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text3);
+      }
+      .output-actions {
+        display: flex;
+        gap: 6px;
+      }
 
-/* ── Output panel ── */
-.output-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
-}
-.output-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text3);
-}
-.output-actions { display:flex; gap:6px; }
+      .btn-copy,
+      .btn-reset,
+      .btn-format,
+      .btn-save {
+        padding: 5px 12px;
+        border-radius: 5px;
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+        border: 1px solid;
+      }
+      .btn-copy {
+        background: var(--accent-dim);
+        border-color: var(--accent2);
+        color: var(--accent);
+      }
+      .btn-copy:hover,
+      .btn-copy.copied {
+        background: var(--accent);
+        color: var(--bg);
+      }
 
-.btn-copy, .btn-reset, .btn-format {
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  border: 1px solid;
-}
-.btn-copy {
-  background: var(--accent-dim);
-  border-color: var(--accent2);
-  color: var(--accent);
-}
-.btn-copy:hover { background: var(--accent); color: var(--bg); }
-.btn-copy.copied { background: var(--accent); color: var(--bg); }
+      .btn-save {
+        background: transparent;
+        border-color: var(--blue);
+        color: var(--blue);
+      }
+      .btn-save:hover {
+        background: rgba(77, 158, 255, 0.1);
+      }
+      .btn-save.saved {
+        background: var(--blue);
+        color: var(--bg);
+      }
 
-.btn-format {
-  background: transparent;
-  border-color: var(--border2);
-  color: var(--text3);
-}
-.btn-format:hover { color: var(--text); border-color: var(--text3); }
-.btn-format.active { color: var(--purple); border-color: var(--purple); background: rgba(182,157,248,0.08); }
+      .btn-format {
+        background: transparent;
+        border-color: var(--border2);
+        color: var(--text3);
+      }
+      .btn-format:hover {
+        color: var(--text);
+        border-color: var(--text3);
+      }
+      .btn-format.active {
+        color: var(--purple);
+        border-color: var(--purple);
+        background: rgba(182, 157, 248, 0.08);
+      }
 
-.btn-reset {
-  background: transparent;
-  border-color: var(--border);
-  color: var(--text3);
-}
-.btn-reset:hover { border-color: var(--red); color: var(--red); background: rgba(255,92,92,0.06); }
+      .btn-reset {
+        background: transparent;
+        border-color: var(--border);
+        color: var(--text3);
+      }
+      .btn-reset:hover {
+        border-color: var(--red);
+        color: var(--red);
+        background: rgba(255, 92, 92, 0.06);
+      }
 
-/* ── Code output ── */
-.code-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--text2);
-  white-space: pre-wrap;
-  word-break: break-all;
-  min-height: 80px;
-  position: relative;
-  overflow: hidden;
-}
-.code-box .token-curl    { color: var(--accent); font-weight:600; }
-.code-box .token-flag    { color: var(--purple); }
-.code-box .token-url     { color: var(--blue); }
-.code-box .token-header  { color: var(--orange); }
-.code-box .token-value   { color: var(--yellow); }
-.code-box .token-string  { color: var(--yellow); }
-.code-box .token-cont    { color: var(--text3); }
+      /* ── Code output ── */
+      .code-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--text2);
+        white-space: pre-wrap;
+        word-break: break-all;
+        min-height: 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .code-box .token-curl {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .code-box .token-flag {
+        color: var(--purple);
+      }
+      .code-box .token-url {
+        color: var(--blue);
+      }
+      .code-box .token-header {
+        color: var(--orange);
+      }
+      .code-box .token-value {
+        color: var(--yellow);
+      }
+      .code-box .token-cont {
+        color: var(--text3);
+      }
 
-/* ── Best practices hints ── */
-.hints-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.hints-header {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text3);
-  display:flex; justify-content:space-between; align-items:center;
-}
-.hints-list { padding:8px 0; }
-.hint-item {
-  display:flex; align-items:flex-start; gap:8px;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: var(--text2);
-  border-left: 2px solid transparent;
-  transition: all 0.15s;
-}
-.hint-item.warn { border-left-color: var(--yellow); color: var(--yellow); background: rgba(255,209,102,0.04); }
-.hint-item.info { border-left-color: var(--blue); color: var(--blue); background: rgba(77,158,255,0.04); }
-.hint-item.ok   { border-left-color: var(--accent); color: var(--accent); background: rgba(0,208,132,0.04); }
-.hint-icon { font-size: 13px; margin-top:1px; flex-shrink:0; }
-.hint-text { font-family: var(--mono); font-size: 11px; line-height: 1.5; }
+      /* ── Hints & History ── */
+      .hints-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .hints-header {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .hints-list {
+        padding: 8px 0;
+      }
+      .hint-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 6px 14px;
+        font-size: 12px;
+        color: var(--text2);
+        border-left: 2px solid transparent;
+        transition: all 0.15s;
+      }
+      .hint-item:hover.clickable {
+        background: var(--surface2);
+      }
+      .hint-item.warn {
+        border-left-color: var(--yellow);
+        color: var(--yellow);
+        background: rgba(255, 209, 102, 0.04);
+      }
+      .hint-item.info {
+        border-left-color: var(--blue);
+        color: var(--blue);
+        background: rgba(77, 158, 255, 0.04);
+      }
+      .hint-item.ok {
+        border-left-color: var(--accent);
+        color: var(--accent);
+        background: rgba(0, 208, 132, 0.04);
+      }
+      .hint-icon {
+        font-size: 13px;
+        margin-top: 1px;
+        flex-shrink: 0;
+      }
+      .hint-text {
+        font-family: var(--mono);
+        font-size: 11px;
+        line-height: 1.5;
+      }
 
-/* ── Divider ── */
-.divider { height:1px; background:var(--border); margin:20px 0; }
-
-/* ── Inline label ── */
-.field-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 5px;
-  display: block;
-}
-
-.field-row { display:flex; flex-direction:column; gap:5px; margin-bottom:8px; }
-.field-group { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-
-/* ── Tag badge ── */
-.method-badge {
-  display:inline-block;
-  font-family:var(--mono); font-size:10px; font-weight:700;
-  padding:2px 7px; border-radius:3px; letter-spacing:.05em;
-}
-.badge-GET    {background:rgba(0,208,132,.12);color:var(--accent);}
-.badge-POST   {background:rgba(77,158,255,.12);color:var(--blue);}
-.badge-PUT    {background:rgba(255,140,66,.12);color:var(--orange);}
-.badge-PATCH  {background:rgba(255,209,102,.12);color:var(--yellow);}
-.badge-DELETE {background:rgba(255,92,92,.12);color:var(--red);}
-</style>
-</head>
-<body>
-
-<div class="topbar">
-  <div class="topbar-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-  <div class="topbar-title">~ <span>curl</span> generator</div>
-  <div class="topbar-version">v1.0</div>
-</div>
-
-<div class="layout">
-
-  <!-- ══ LEFT: INPUT PANEL ══ -->
-  <div class="panel">
-
-    <!-- METHOD + URL -->
-    <div class="section">
-      <div class="section-label">Request</div>
-      <div class="url-row" style="margin-bottom:8px;">
-        <select class="method-select GET" id="method" onchange="onMethodChange(this)">
-          <option>GET</option>
-          <option>POST</option>
-          <option>PUT</option>
-          <option>PATCH</option>
-          <option>DELETE</option>
-          <option>HEAD</option>
-          <option>OPTIONS</option>
-        </select>
-        <input type="text" id="baseUrl" placeholder="https://api.example.com" oninput="generate()">
+      /* ── Divider & Labels ── */
+      .field-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 5px;
+        display: block;
+      }
+      .field-row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="topbar-dots">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
       </div>
-      <div class="field-row">
-        <label class="field-label">Endpoint Path</label>
-        <input type="text" id="endpoint" placeholder="/v1/users/{id}" oninput="generate()">
-      </div>
+      <div class="topbar-title">~ <span>curl</span> generator</div>
+      <div class="topbar-version">v1.2 (Bug Fix)</div>
     </div>
 
-    <!-- QUERY PARAMS -->
-    <div class="section">
-      <div class="section-label">Query Parameters</div>
-      <div id="queryList"></div>
-      <button class="btn-add" onclick="addRow('queryList', qRow)">+ Add Parameter</button>
-    </div>
-
-    <!-- AUTH -->
-    <div class="section">
-      <div class="section-label">Authentication</div>
-      <div class="auth-type-row">
-        <div class="auth-pill active" data-auth="none"     onclick="setAuth('none')">None</div>
-        <div class="auth-pill"       data-auth="bearer"   onclick="setAuth('bearer')">Bearer Token</div>
-        <div class="auth-pill"       data-auth="basic"    onclick="setAuth('basic')">Basic Auth</div>
-        <div class="auth-pill"       data-auth="apikey"   onclick="setAuth('apikey')">API Key</div>
-        <div class="auth-pill"       data-auth="custom"   onclick="setAuth('custom')">Custom</div>
-      </div>
-      <div id="authFields"></div>
-    </div>
-
-    <!-- HEADERS -->
-    <div class="section">
-      <div class="section-label">Headers</div>
-      <div id="headerList"></div>
-      <button class="btn-add" onclick="addRow('headerList', headerRow)">+ Add Header</button>
-    </div>
-
-    <!-- BODY -->
-    <div class="section" id="bodySection">
-      <div class="section-label">Body</div>
-      <div class="body-tabs">
-        <button class="body-tab active" data-body="none"     onclick="setBody('none')">None</button>
-        <button class="body-tab"        data-body="json"     onclick="setBody('json')">JSON</button>
-        <button class="body-tab"        data-body="form"     onclick="setBody('form')">Form Data</button>
-        <button class="body-tab"        data-body="formraw"  onclick="setBody('formraw')">URL Encoded</button>
-        <button class="body-tab"        data-body="raw"      onclick="setBody('raw')">Raw</button>
-      </div>
-      <div id="bodyFields"></div>
-    </div>
-
-    <!-- OPTIONS -->
-    <div class="section">
-      <div class="section-label">Options</div>
-      <div class="options-grid">
-        <label class="option-item">
-          <input type="checkbox" id="opt_verbose" onchange="generate()">
-          <label for="opt_verbose">--verbose</label>
-        </label>
-        <label class="option-item">
-          <input type="checkbox" id="opt_insecure" onchange="generate()">
-          <label for="opt_insecure">--insecure</label>
-        </label>
-        <label class="option-item">
-          <input type="checkbox" id="opt_compressed" onchange="generate()">
-          <label for="opt_compressed">--compressed</label>
-        </label>
-        <label class="option-item">
-          <input type="checkbox" id="opt_location" onchange="generate()">
-          <label for="opt_location">--location</label>
-        </label>
-        <label class="option-item">
-          <input type="checkbox" id="opt_fail" onchange="generate()">
-          <label for="opt_fail">--fail</label>
-        </label>
-        <label class="option-item">
-          <input type="checkbox" id="opt_silent" onchange="generate()">
-          <label for="opt_silent">--silent</label>
-        </label>
-        <div class="option-item">
-          <input type="checkbox" id="opt_timeout_en" onchange="generate()">
-          <label for="opt_timeout_en">--max-time</label>
-          <input type="number" id="opt_timeout" value="30" min="1" max="300" style="margin-left:4px" oninput="generate()">
+    <div class="layout">
+      <div class="panel">
+        <div class="section">
+          <div class="section-label">Request</div>
+          <div class="url-row" style="margin-bottom: 8px">
+            <select
+              class="method-select GET"
+              id="method"
+              onchange="onMethodChange(this)"
+            >
+              <option>GET</option>
+              <option>POST</option>
+              <option>PUT</option>
+              <option>PATCH</option>
+              <option>DELETE</option>
+              <option>HEAD</option>
+              <option>OPTIONS</option>
+            </select>
+            <input
+              type="text"
+              id="baseUrl"
+              placeholder="https://api.example.com"
+              oninput="generate()"
+            />
+          </div>
+          <div class="field-row">
+            <label class="field-label">Endpoint Path</label>
+            <input
+              type="text"
+              id="endpoint"
+              placeholder="/v1/users/{id}"
+              oninput="generate()"
+            />
+          </div>
         </div>
-        <div class="option-item">
-          <input type="checkbox" id="opt_retry_en" onchange="generate()">
-          <label for="opt_retry_en">--retry</label>
-          <input type="number" id="opt_retry" value="3" min="1" max="10" style="margin-left:4px" oninput="generate()">
+
+        <div class="section">
+          <div class="section-label">Query Parameters</div>
+          <div id="queryList"></div>
+          <button class="btn-add" onclick="addRow('queryList', qRow)">
+            + Add Parameter
+          </button>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Authentication</div>
+          <div class="auth-type-row">
+            <div
+              class="auth-pill active"
+              data-auth="none"
+              onclick="setAuth('none')"
+            >
+              None
+            </div>
+            <div
+              class="auth-pill"
+              data-auth="bearer"
+              onclick="setAuth('bearer')"
+            >
+              Bearer Token
+            </div>
+            <div class="auth-pill" data-auth="basic" onclick="setAuth('basic')">
+              Basic Auth
+            </div>
+            <div
+              class="auth-pill"
+              data-auth="apikey"
+              onclick="setAuth('apikey')"
+            >
+              API Key
+            </div>
+            <div
+              class="auth-pill"
+              data-auth="custom"
+              onclick="setAuth('custom')"
+            >
+              Custom
+            </div>
+          </div>
+          <div id="authFields"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Headers</div>
+          <div id="headerList"></div>
+          <button class="btn-add" onclick="addRow('headerList', headerRow)">
+            + Add Header
+          </button>
+        </div>
+
+        <div class="section" id="bodySection">
+          <div class="section-label">Body</div>
+          <div class="body-tabs">
+            <button
+              class="body-tab active"
+              data-body="none"
+              onclick="setBody('none')"
+            >
+              None
+            </button>
+            <button class="body-tab" data-body="json" onclick="setBody('json')">
+              JSON
+            </button>
+            <button class="body-tab" data-body="form" onclick="setBody('form')">
+              Form Data
+            </button>
+            <button
+              class="body-tab"
+              data-body="formraw"
+              onclick="setBody('formraw')"
+            >
+              URL Encoded
+            </button>
+            <button class="body-tab" data-body="raw" onclick="setBody('raw')">
+              Raw
+            </button>
+          </div>
+          <div id="bodyFields"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Options</div>
+          <div class="options-grid">
+            <label class="option-item"
+              ><input
+                type="checkbox"
+                id="opt_verbose"
+                onchange="generate()"
+              /><label for="opt_verbose">--verbose</label></label
+            >
+            <label class="option-item"
+              ><input
+                type="checkbox"
+                id="opt_insecure"
+                onchange="generate()"
+              /><label for="opt_insecure">--insecure</label></label
+            >
+            <label class="option-item"
+              ><input
+                type="checkbox"
+                id="opt_compressed"
+                onchange="generate()"
+              /><label for="opt_compressed">--compressed</label></label
+            >
+            <label class="option-item"
+              ><input
+                type="checkbox"
+                id="opt_location"
+                onchange="generate()"
+              /><label for="opt_location">--location</label></label
+            >
+            <label class="option-item"
+              ><input
+                type="checkbox"
+                id="opt_fail"
+                onchange="generate()"
+              /><label for="opt_fail">--fail</label></label
+            >
+            <label class="option-item"
+              ><input
+                type="checkbox"
+                id="opt_silent"
+                onchange="generate()"
+              /><label for="opt_silent">--silent</label></label
+            >
+            <div class="option-item">
+              <input
+                type="checkbox"
+                id="opt_timeout_en"
+                onchange="generate()"
+              /><label for="opt_timeout_en">--max-time</label
+              ><input
+                type="number"
+                id="opt_timeout"
+                value="30"
+                min="1"
+                max="300"
+                style="margin-left: 4px"
+                oninput="generate()"
+              />
+            </div>
+            <div class="option-item">
+              <input
+                type="checkbox"
+                id="opt_retry_en"
+                onchange="generate()"
+              /><label for="opt_retry_en">--retry</label
+              ><input
+                type="number"
+                id="opt_retry"
+                value="3"
+                min="1"
+                max="10"
+                style="margin-left: 4px"
+                oninput="generate()"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel output-panel">
+        <div>
+          <div class="output-header">
+            <span class="output-label">Generated cURL</span>
+            <div class="output-actions">
+              <button
+                class="btn-format"
+                id="btnFormat"
+                onclick="toggleFormat()"
+              >
+                Multiline
+              </button>
+              <button class="btn-save" id="btnSave" onclick="saveCurrentCurl()">
+                Save
+              </button>
+              <button class="btn-copy" id="btnCopy" onclick="copyOutput()">
+                Copy
+              </button>
+              <button class="btn-reset" onclick="resetAll()">Reset</button>
+            </div>
+          </div>
+          <div style="height: 10px"></div>
+          <div class="code-box" id="output">
+            <span style="color: var(--text3); font-style: italic"
+              >Fill in the fields on the left to generate your curl
+              command...</span
+            >
+          </div>
+        </div>
+
+        <div class="hints-box">
+          <div class="hints-header">
+            <span>Best Practice Hints</span>
+            <span id="hintCount" style="color: var(--text3)">—</span>
+          </div>
+          <div class="hints-list" id="hintsList">
+            <div class="hint-item info">
+              <span class="hint-icon">ℹ️</span
+              ><span class="hint-text"
+                >Start building your request to see best practice
+                suggestions.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="hints-box">
+          <div class="hints-header">
+            <span>Saved History</span>
+            <button
+              onclick="clearHistory()"
+              style="
+                background: none;
+                border: none;
+                color: var(--red);
+                cursor: pointer;
+                font-family: var(--mono);
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+              "
+            >
+              Clear All
+            </button>
+          </div>
+          <div class="hints-list" id="historyList"></div>
         </div>
       </div>
     </div>
 
-  </div><!-- /panel left -->
+    <script>
+      // ── State ─────────────────────────────────────────────────────────────────────
+      let authType = "none";
+      let bodyType = "none";
+      let multiline = false;
+      let rowId = 0;
+      let currentRawCurl = "";
 
-  <!-- ══ RIGHT: OUTPUT PANEL ══ -->
-  <div class="panel output-panel">
-
-    <div>
-      <div class="output-header">
-        <span class="output-label">Generated cURL</span>
-        <div class="output-actions">
-          <button class="btn-format" id="btnFormat" onclick="toggleFormat()">Multiline</button>
-          <button class="btn-copy"   id="btnCopy"   onclick="copyOutput()">Copy</button>
-          <button class="btn-reset"  onclick="resetAll()">Reset</button>
-        </div>
-      </div>
-      <div style="height:10px"></div>
-      <div class="code-box" id="output">
-        <span style="color:var(--text3); font-style:italic">Fill in the fields on the left to generate your curl command...</span>
-      </div>
-    </div>
-
-    <div class="hints-box">
-      <div class="hints-header">
-        <span>Best Practice Hints</span>
-        <span id="hintCount" style="color:var(--text3)">—</span>
-      </div>
-      <div class="hints-list" id="hintsList">
-        <div class="hint-item info">
-          <span class="hint-icon">ℹ️</span>
-          <span class="hint-text">Start building your request to see best practice suggestions.</span>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /panel right -->
-
-</div><!-- /layout -->
-
-<script>
-// ── State ─────────────────────────────────────────────────────────────────────
-let authType  = 'none';
-let bodyType  = 'none';
-let multiline = false;
-let rowId     = 0;
-
-// ── Row templates ─────────────────────────────────────────────────────────────
-function qRow(id) {
-  return `<div class="kv-row" id="row-${id}">
-    <input type="text" placeholder="key"   onchange="generate()" oninput="generate()">
-    <input type="text" placeholder="value" onchange="generate()" oninput="generate()">
+      // ── Row templates ─────────────────────────────────────────────────────────────
+      function qRow(id) {
+        return `<div class="kv-row" id="row-${id}">
+    <input type="text" placeholder="key" oninput="generate()">
+    <input type="text" placeholder="value" oninput="generate()">
     <button class="btn-remove" onclick="removeRow(${id})">×</button>
   </div>`;
-}
+      }
 
-function headerRow(id) {
-  const common = ['Content-Type','Accept','Authorization','X-Request-ID','User-Agent','Cache-Control','X-API-Key'];
-  const opts = common.map(h=>`<option value="${h}">${h}</option>`).join('');
-  return `<div class="kv-row" id="row-${id}">
-    <input type="text" list="header-suggestions-${id}" placeholder="Header-Name" onchange="generate()" oninput="generate()">
+      function headerRow(id) {
+        const common = [
+          "Content-Type",
+          "Accept",
+          "Authorization",
+          "X-Request-ID",
+          "User-Agent",
+          "Cache-Control",
+          "X-API-Key",
+        ];
+        const opts = common
+          .map((h) => `<option value="${h}">${h}</option>`)
+          .join("");
+        return `<div class="kv-row" id="row-${id}">
+    <input type="text" list="header-suggestions-${id}" placeholder="Header-Name" oninput="generate()">
     <datalist id="header-suggestions-${id}">${opts}</datalist>
-    <input type="text" placeholder="value" onchange="generate()" oninput="generate()">
+    <input type="text" placeholder="value" oninput="generate()">
     <button class="btn-remove" onclick="removeRow(${id})">×</button>
   </div>`;
-}
+      }
 
-function formRow(id) {
-  return `<div class="kv-row" id="row-${id}">
-    <input type="text" placeholder="field" onchange="generate()" oninput="generate()">
-    <input type="text" placeholder="value" onchange="generate()" oninput="generate()">
+      function formRow(id) {
+        return `<div class="kv-row" id="row-${id}">
+    <input type="text" placeholder="field" oninput="generate()">
+    <input type="text" placeholder="value" oninput="generate()">
     <button class="btn-remove" onclick="removeRow(${id})">×</button>
   </div>`;
-}
-
-function addRow(containerId, template) {
-  rowId++;
-  document.getElementById(containerId).insertAdjacentHTML('beforeend', template(rowId));
-  generate();
-}
-
-function removeRow(id) {
-  const el = document.getElementById(`row-${id}`);
-  if (el) { el.style.opacity='0'; el.style.transform='translateY(-4px)'; el.style.transition='.15s'; setTimeout(()=>el.remove(),150); }
-  setTimeout(generate, 160);
-}
-
-// ── Method change ─────────────────────────────────────────────────────────────
-function onMethodChange(sel) {
-  sel.className = 'method-select ' + sel.value;
-  // Show/hide body for GET/HEAD
-  const noBody = ['GET','HEAD','OPTIONS'];
-  document.getElementById('bodySection').style.opacity = noBody.includes(sel.value) ? '0.4' : '1';
-  generate();
-}
-
-// ── Auth ──────────────────────────────────────────────────────────────────────
-function setAuth(type) {
-  authType = type;
-  document.querySelectorAll('.auth-pill').forEach(p => p.classList.toggle('active', p.dataset.auth===type));
-  const f = document.getElementById('authFields');
-  f.innerHTML = '';
-  if (type==='bearer') {
-    f.innerHTML=`<div class="auth-fields">
-      <label class="field-label">Token</label>
-      <input type="text" id="auth_token" placeholder="eyJhbGciOi..." oninput="generate()">
-    </div>`;
-  } else if (type==='basic') {
-    f.innerHTML=`<div class="auth-fields">
-      <div class="auth-row">
-        <div><label class="field-label">Username</label><input type="text" id="auth_user" placeholder="username" oninput="generate()"></div>
-        <div><label class="field-label">Password</label><input type="password" id="auth_pass" placeholder="••••••••" oninput="generate()"></div>
-      </div>
-    </div>`;
-  } else if (type==='apikey') {
-    f.innerHTML=`<div class="auth-fields">
-      <div class="auth-row" style="margin-bottom:6px">
-        <div><label class="field-label">Key Name</label><input type="text" id="auth_key_name" placeholder="X-API-Key" value="X-API-Key" oninput="generate()"></div>
-        <div><label class="field-label">Key Value</label><input type="text" id="auth_key_val" placeholder="sk-..." oninput="generate()"></div>
-      </div>
-      <label class="field-label">Add As</label>
-      <select id="auth_key_in" onchange="generate()">
-        <option value="header">Header</option>
-        <option value="query">Query Parameter</option>
-      </select>
-    </div>`;
-  } else if (type==='custom') {
-    f.innerHTML=`<div class="auth-fields">
-      <label class="field-label">Custom Auth Header Value</label>
-      <input type="text" id="auth_custom" placeholder="Digest realm=..., nonce=..." oninput="generate()">
-    </div>`;
-  }
-  generate();
-}
-
-// ── Body ──────────────────────────────────────────────────────────────────────
-function setBody(type) {
-  bodyType = type;
-  document.querySelectorAll('.body-tab').forEach(t => t.classList.toggle('active', t.dataset.body===type));
-  const f = document.getElementById('bodyFields');
-  f.innerHTML = '';
-  if (type==='json') {
-    f.innerHTML=`<textarea id="body_json" placeholder='{\n  "key": "value"\n}' oninput="generate()" style="min-height:120px;font-size:12px"></textarea>`;
-  } else if (type==='form' || type==='formraw') {
-    f.innerHTML=`<div id="formList"></div><button class="btn-add" onclick="addRow('formList',formRow)">+ Add Field</button>`;
-  } else if (type==='raw') {
-    f.innerHTML=`
-      <div style="display:flex;gap:6px;margin-bottom:6px">
-        <select id="body_raw_type" onchange="generate()" style="width:auto;min-width:120px">
-          <option value="text/plain">text/plain</option>
-          <option value="application/xml">application/xml</option>
-          <option value="text/html">text/html</option>
-        </select>
-      </div>
-      <textarea id="body_raw" placeholder="Raw body content..." oninput="generate()" style="min-height:100px"></textarea>`;
-  }
-  generate();
-}
-
-// ── Collect KV rows ───────────────────────────────────────────────────────────
-function collectKV(containerId) {
-  const rows = document.querySelectorAll(`#${containerId} .kv-row`);
-  const pairs = [];
-  rows.forEach(row => {
-    const inputs = row.querySelectorAll('input[type=text], input[type=password]');
-    if (inputs.length >= 2) {
-      const k = inputs[0].value.trim();
-      const v = inputs[1].value.trim();
-      if (k) pairs.push({k,v});
-    }
-  });
-  return pairs;
-}
-
-// ── Shell escape ─────────────────────────────────────────────────────────────
-function shellEscape(str) {
-  return "'" + str.replace(/'/g, "'\\''") + "'";
-}
-
-// ── Generate ──────────────────────────────────────────────────────────────────
-function generate() {
-  const method   = document.getElementById('method').value;
-  const baseUrl  = document.getElementById('baseUrl').value.trim().replace(/\/+$/,'');
-  const endpoint = document.getElementById('endpoint').value.trim().replace(/^\/*/,'/');
-  const sep      = multiline ? ' \\\n  ' : ' ';
-
-  if (!baseUrl) { document.getElementById('output').innerHTML = '<span style="color:var(--text3);font-style:italic">Enter a base URL to get started...</span>'; updateHints([]); return; }
-
-  const parts = ['curl'];
-
-  // Method (omit -X for GET as best practice)
-  if (method !== 'GET') parts.push(`-X ${method}`);
-
-  // Options
-  if (document.getElementById('opt_verbose').checked)   parts.push('--verbose');
-  if (document.getElementById('opt_insecure').checked)  parts.push('--insecure');
-  if (document.getElementById('opt_compressed').checked)parts.push('--compressed');
-  if (document.getElementById('opt_location').checked)  parts.push('--location');
-  if (document.getElementById('opt_fail').checked)      parts.push('--fail');
-  if (document.getElementById('opt_silent').checked)    parts.push('--silent');
-  if (document.getElementById('opt_timeout_en').checked) parts.push(`--max-time ${document.getElementById('opt_timeout').value||30}`);
-  if (document.getElementById('opt_retry_en').checked)  parts.push(`--retry ${document.getElementById('opt_retry').value||3}`);
-
-  // Query params
-  const qParams = collectKV('queryList');
-  let url = baseUrl + endpoint;
-  if (endpoint === '/') url = baseUrl;
-
-  // Auth query param
-  if (authType==='apikey') {
-    const keyIn   = document.getElementById('auth_key_in')?.value;
-    const keyName = document.getElementById('auth_key_name')?.value.trim();
-    const keyVal  = document.getElementById('auth_key_val')?.value.trim();
-    if (keyIn==='query' && keyName && keyVal) qParams.push({k:keyName, v:keyVal});
-  }
-
-  if (qParams.length) {
-    url += '?' + qParams.map(({k,v}) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
-  }
-
-  parts.push(`"${url}"`);
-
-  // Auth headers
-  if (authType==='bearer') {
-    const tok = document.getElementById('auth_token')?.value.trim();
-    if (tok) parts.push(`-H "Authorization: Bearer ${tok}"`);
-  } else if (authType==='basic') {
-    const u = document.getElementById('auth_user')?.value.trim();
-    const p = document.getElementById('auth_pass')?.value.trim();
-    if (u && p) parts.push(`--user "${u}:${p}"`);
-    else if (u) parts.push(`--user "${u}"`);
-  } else if (authType==='apikey') {
-    const keyIn   = document.getElementById('auth_key_in')?.value;
-    const keyName = document.getElementById('auth_key_name')?.value.trim();
-    const keyVal  = document.getElementById('auth_key_val')?.value.trim();
-    if (keyIn==='header' && keyName && keyVal) parts.push(`-H "${keyName}: ${keyVal}"`);
-  } else if (authType==='custom') {
-    const c = document.getElementById('auth_custom')?.value.trim();
-    if (c) parts.push(`-H "Authorization: ${c}"`);
-  }
-
-  // Headers
-  const headers = collectKV('headerList');
-  headers.forEach(({k,v}) => { if (k) parts.push(`-H "${k}: ${v}"`); });
-
-  // Body
-  const noBody = ['GET','HEAD','OPTIONS'];
-  if (!noBody.includes(method)) {
-    if (bodyType==='json') {
-      const body = document.getElementById('body_json')?.value.trim();
-      if (body) {
-        // Auto-add Content-Type if not already in headers
-        const hasContentType = headers.some(h => h.k.toLowerCase()==='content-type');
-        if (!hasContentType) parts.push(`-H "Content-Type: application/json"`);
-        parts.push(`-d ${shellEscape(body)}`);
       }
-    } else if (bodyType==='form') {
-      const formPairs = collectKV('formList');
-      formPairs.forEach(({k,v}) => { if (k) parts.push(`-F "${k}=${v}"`); });
-    } else if (bodyType==='formraw') {
-      const formPairs = collectKV('formList');
-      if (formPairs.length) {
-        const encoded = formPairs.filter(p=>p.k).map(({k,v})=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
-        const hasContentType = headers.some(h => h.k.toLowerCase()==='content-type');
-        if (!hasContentType) parts.push(`-H "Content-Type: application/x-www-form-urlencoded"`);
-        parts.push(`--data-urlencode ${shellEscape(encoded)}`);
+
+      function addRow(containerId, template) {
+        rowId++;
+        document
+          .getElementById(containerId)
+          .insertAdjacentHTML("beforeend", template(rowId));
+        generate();
       }
-    } else if (bodyType==='raw') {
-      const body    = document.getElementById('body_raw')?.value.trim();
-      const rawType = document.getElementById('body_raw_type')?.value;
-      if (body) {
-        const hasContentType = headers.some(h => h.k.toLowerCase()==='content-type');
-        if (!hasContentType && rawType) parts.push(`-H "Content-Type: ${rawType}"`);
-        parts.push(`-d ${shellEscape(body)}`);
+
+      function removeRow(id) {
+        const el = document.getElementById(`row-${id}`);
+        if (el) {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(-4px)";
+          el.style.transition = ".15s";
+          setTimeout(() => el.remove(), 150);
+        }
+        setTimeout(generate, 160);
       }
-    }
-  }
 
-  // Render
-  const rendered = parts.join(sep);
-  renderOutput(rendered, method, url);
-  updateHints({ method, baseUrl, headers, authType, bodyType, url });
-}
+      // ── Method change ─────────────────────────────────────────────────────────────
+      function onMethodChange(sel) {
+        sel.className = "method-select " + sel.value;
+        const noBody = ["GET", "HEAD", "OPTIONS"];
+        document.getElementById("bodySection").style.opacity = noBody.includes(
+          sel.value,
+        )
+          ? "0.4"
+          : "1";
+        generate();
+      }
 
-// ── Syntax highlight render ───────────────────────────────────────────────────
-function renderOutput(raw, method, url) {
-  if (!raw) return;
-  // Simple tokenizer
-  let html = raw
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/^curl/, '<span class="token-curl">curl</span>')
-    .replace(/(--?[\w-]+)/g, '<span class="token-flag">$1</span>')
-    .replace(/(<span class="token-flag">-[A-Z]<\/span>)/g, '<span class="token-flag">$1</span>')
-    .replace(/"([^"]+):\s([^"]+)"/g, '"<span class="token-header">$1</span>: <span class="token-value">$2</span>"')
-    .replace(/(\\$)/mg, '<span class="token-cont">\\</span>')
-    ;
-  // Highlight the URL
-  const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-  html = html.replace(new RegExp(`"${escapedUrl.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}"`,'g'),
-    `"<span class="token-url">${url.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>"`);
+      // ── Auth ──────────────────────────────────────────────────────────────────────
+      function setAuth(type) {
+        authType = type;
+        document
+          .querySelectorAll(".auth-pill")
+          .forEach((p) =>
+            p.classList.toggle("active", p.dataset.auth === type),
+          );
+        const f = document.getElementById("authFields");
+        f.innerHTML = "";
+        if (type === "bearer") {
+          f.innerHTML = `<div class="auth-fields"><label class="field-label">Token</label><input type="text" id="auth_token" placeholder="eyJhbGciOi..." oninput="generate()"></div>`;
+        } else if (type === "basic") {
+          f.innerHTML = `<div class="auth-fields"><div class="auth-row"><div><label class="field-label">Username</label><input type="text" id="auth_user" placeholder="username" oninput="generate()"></div><div><label class="field-label">Password</label><input type="password" id="auth_pass" placeholder="••••••••" oninput="generate()"></div></div></div>`;
+        } else if (type === "apikey") {
+          f.innerHTML = `<div class="auth-fields"><div class="auth-row" style="margin-bottom:6px"><div><label class="field-label">Key Name</label><input type="text" id="auth_key_name" placeholder="X-API-Key" value="X-API-Key" oninput="generate()"></div><div><label class="field-label">Key Value</label><input type="text" id="auth_key_val" placeholder="sk-..." oninput="generate()"></div></div><label class="field-label">Add As</label><select id="auth_key_in" onchange="generate()"><option value="header">Header</option><option value="query">Query Parameter</option></select></div>`;
+        } else if (type === "custom") {
+          f.innerHTML = `<div class="auth-fields"><label class="field-label">Custom Auth Header Value</label><input type="text" id="auth_custom" placeholder="Digest realm=..., nonce=..." oninput="generate()"></div>`;
+        }
+        generate();
+      }
 
-  document.getElementById('output').innerHTML = html;
-}
+      // ── Body ──────────────────────────────────────────────────────────────────────
+      function setBody(type) {
+        bodyType = type;
+        document
+          .querySelectorAll(".body-tab")
+          .forEach((t) =>
+            t.classList.toggle("active", t.dataset.body === type),
+          );
+        const f = document.getElementById("bodyFields");
+        f.innerHTML = "";
+        if (type === "json") {
+          f.innerHTML = `<textarea id="body_json" placeholder='{\n  "key": "value"\n}' oninput="generate()" style="min-height:120px;font-size:12px"></textarea>`;
+        } else if (type === "form" || type === "formraw") {
+          f.innerHTML = `<div id="formList"></div><button class="btn-add" onclick="addRow('formList',formRow)">+ Add Field</button>`;
+        } else if (type === "raw") {
+          f.innerHTML = `<div style="display:flex;gap:6px;margin-bottom:6px"><select id="body_raw_type" onchange="generate()" style="width:auto;min-width:120px"><option value="text/plain">text/plain</option><option value="application/xml">application/xml</option><option value="text/html">text/html</option></select></div><textarea id="body_raw" placeholder="Raw body content..." oninput="generate()" style="min-height:100px"></textarea>`;
+        }
+        generate();
+      }
 
-// ── Best practice hints ───────────────────────────────────────────────────────
-function updateHints({method, baseUrl, headers, authType, bodyType, url}) {
-  const hints = [];
+      // ── Collect KV rows ───────────────────────────────────────────────────────────
+      function collectKV(containerId) {
+        const rows = document.querySelectorAll(`#${containerId} .kv-row`);
+        const pairs = [];
+        rows.forEach((row) => {
+          const inputs = row.querySelectorAll(
+            "input[type=text], input[type=password]",
+          );
+          if (inputs.length >= 2) {
+            let k = inputs[0].value.trim();
+            const v = inputs[1].value.trim();
+            if (k) pairs.push({ k, v });
+          }
+        });
+        return pairs;
+      }
 
-  // HTTPS check
-  if (baseUrl && baseUrl.startsWith('http://')) {
-    hints.push({type:'warn', icon:'⚠️', text:'Using HTTP — consider switching to HTTPS for security'});
-  } else if (baseUrl && baseUrl.startsWith('https://')) {
-    hints.push({type:'ok', icon:'✓', text:'Using HTTPS — good!'});
-  }
+      function shellEscape(str) {
+        return "'" + str.replace(/'/g, "'\\''") + "'";
+      }
 
-  // Insecure flag
-  if (document.getElementById('opt_insecure').checked) {
-    hints.push({type:'warn', icon:'⚠️', text:'--insecure skips SSL verification — avoid in production'});
-  }
+      // ── Generate ──────────────────────────────────────────────────────────────────
+      function generate() {
+        const method = document.getElementById("method").value;
+        const baseUrl = document
+          .getElementById("baseUrl")
+          .value.trim()
+          .replace(/\/+$/, "");
+        const endpoint = document
+          .getElementById("endpoint")
+          .value.trim()
+          .replace(/^\/*/, "/");
+        const sep = multiline ? " \\\n  " : " ";
 
-  // Auth
-  if (authType==='none' && method !== 'GET') {
-    hints.push({type:'info', icon:'💡', text:'No auth set — add authentication for protected endpoints'});
-  }
-  if (authType==='bearer') {
-    hints.push({type:'ok', icon:'✓', text:'Bearer token auth — store tokens in env vars, not source code'});
-  }
-  if (authType==='basic') {
-    hints.push({type:'warn', icon:'⚠️', text:'Basic Auth transmits credentials — always use with HTTPS'});
-  }
+        if (!baseUrl) {
+          document.getElementById("output").innerHTML =
+            '<span style="color:var(--text3);font-style:italic">Enter a base URL to get started...</span>';
+          updateHints([]);
+          currentRawCurl = "";
+          return;
+        }
 
-  // Content-Type
-  if ((bodyType==='json') && !document.getElementById('opt_insecure').checked) {
-    hints.push({type:'ok', icon:'✓', text:'Content-Type: application/json auto-added for JSON body'});
-  }
+        const parts = ["curl"];
+        if (method !== "GET") parts.push(`-X ${method}`);
 
-  // Accept header
-  const hasAccept = (headers||[]).some(h => h.k.toLowerCase()==='accept');
-  if (!hasAccept) {
-    hints.push({type:'info', icon:'💡', text:'Consider adding Accept: application/json header'});
-  }
+        // Options
+        if (document.getElementById("opt_verbose").checked)
+          parts.push("--verbose");
+        if (document.getElementById("opt_insecure").checked)
+          parts.push("--insecure");
+        if (document.getElementById("opt_compressed").checked)
+          parts.push("--compressed");
+        if (document.getElementById("opt_location").checked)
+          parts.push("--location");
+        if (document.getElementById("opt_fail").checked) parts.push("--fail");
+        if (document.getElementById("opt_silent").checked)
+          parts.push("--silent");
+        if (document.getElementById("opt_timeout_en").checked)
+          parts.push(
+            `--max-time ${document.getElementById("opt_timeout").value || 30}`,
+          );
+        if (document.getElementById("opt_retry_en").checked)
+          parts.push(
+            `--retry ${document.getElementById("opt_retry").value || 3}`,
+          );
 
-  // Timeout
-  if (!document.getElementById('opt_timeout_en').checked) {
-    hints.push({type:'info', icon:'💡', text:'No --max-time set — requests may hang indefinitely'});
-  }
+        // Query params
+        const qParams = collectKV("queryList");
+        let url = baseUrl + endpoint;
+        if (endpoint === "/") url = baseUrl;
 
-  // Verbose in prod warning
-  if (document.getElementById('opt_verbose').checked) {
-    hints.push({type:'warn', icon:'⚠️', text:'--verbose logs sensitive headers — remove for production'});
-  }
+        // Auth query param
+        if (authType === "apikey") {
+          const keyIn = document.getElementById("auth_key_in")?.value;
+          const keyName = document
+            .getElementById("auth_key_name")
+            ?.value.trim();
+          const keyVal = document.getElementById("auth_key_val")?.value.trim();
+          if (keyIn === "query" && keyName && keyVal)
+            qParams.push({ k: keyName, v: keyVal });
+        }
 
-  // Retry suggestion
-  if (!document.getElementById('opt_retry_en').checked && method === 'GET') {
-    hints.push({type:'info', icon:'💡', text:'Consider --retry for GET requests to handle transient failures'});
-  }
+        if (qParams.length)
+          url +=
+            "?" +
+            qParams
+              .map(
+                ({ k, v }) =>
+                  `${encodeURIComponent(k)}=${encodeURIComponent(v)}`,
+              )
+              .join("&");
+        parts.push(`"${url}"`);
 
-  // GET body
-  if (method==='GET' && bodyType !== 'none') {
-    hints.push({type:'warn', icon:'⚠️', text:'GET requests should not have a body per HTTP spec'});
-  }
+        // Auth headers
+        if (authType === "bearer") {
+          const tok = document.getElementById("auth_token")?.value.trim();
+          if (tok) parts.push(`-H "Authorization: Bearer ${tok}"`);
+        } else if (authType === "basic") {
+          const u = document.getElementById("auth_user")?.value.trim();
+          const p = document.getElementById("auth_pass")?.value.trim();
+          if (u && p) parts.push(`--user "${u}:${p}"`);
+          else if (u) parts.push(`--user "${u}"`);
+        } else if (authType === "apikey") {
+          const keyIn = document.getElementById("auth_key_in")?.value;
+          const keyName = document
+            .getElementById("auth_key_name")
+            ?.value.trim();
+          const keyVal = document.getElementById("auth_key_val")?.value.trim();
+          if (keyIn === "header" && keyName && keyVal)
+            parts.push(`-H "${keyName}: ${keyVal}"`);
+        } else if (authType === "custom") {
+          const c = document.getElementById("auth_custom")?.value.trim();
+          if (c) parts.push(`-H "Authorization: ${c}"`);
+        }
 
-  // Compressed
-  if (!document.getElementById('opt_compressed').checked) {
-    hints.push({type:'info', icon:'💡', text:'Add --compressed to request gzip encoding (faster)'});
-  }
+        // Headers
+        const headers = collectKV("headerList");
+        headers.forEach(({ k, v }) => {
+          if (k) parts.push(`-H "${k}: ${v}"`);
+        });
 
-  const list = document.getElementById('hintsList');
-  document.getElementById('hintCount').textContent = `${hints.length} hints`;
-  if (!hints.length) {
-    list.innerHTML = '<div class="hint-item ok"><span class="hint-icon">✓</span><span class="hint-text">Looks good!</span></div>';
-    return;
-  }
-  list.innerHTML = hints.map(h =>
-    `<div class="hint-item ${h.type}"><span class="hint-icon">${h.icon}</span><span class="hint-text">${h.text}</span></div>`
-  ).join('');
-}
+        // Body
+        const noBody = ["GET", "HEAD", "OPTIONS"];
+        if (!noBody.includes(method)) {
+          if (bodyType === "json") {
+            const body = document.getElementById("body_json")?.value.trim();
+            if (body) {
+              const hasContentType = headers.some(
+                (h) => h.k.toLowerCase() === "content-type",
+              );
+              if (!hasContentType)
+                parts.push(`-H "Content-Type: application/json"`);
+              parts.push(`-d ${shellEscape(body)}`);
+            }
+          } else if (bodyType === "form") {
+            const formPairs = collectKV("formList");
+            formPairs.forEach(({ k, v }) => {
+              if (k) parts.push(`-F "${k}=${v}"`);
+            });
+          } else if (bodyType === "formraw") {
+            const formPairs = collectKV("formList");
+            if (formPairs.length) {
+              const encoded = formPairs
+                .filter((p) => p.k)
+                .map(
+                  ({ k, v }) =>
+                    `${encodeURIComponent(k)}=${encodeURIComponent(v)}`,
+                )
+                .join("&");
+              const hasContentType = headers.some(
+                (h) => h.k.toLowerCase() === "content-type",
+              );
+              if (!hasContentType)
+                parts.push(
+                  `-H "Content-Type: application/x-www-form-urlencoded"`,
+                );
+              parts.push(`--data-urlencode ${shellEscape(encoded)}`);
+            }
+          } else if (bodyType === "raw") {
+            const body = document.getElementById("body_raw")?.value.trim();
+            const rawType = document.getElementById("body_raw_type")?.value;
+            if (body) {
+              const hasContentType = headers.some(
+                (h) => h.k.toLowerCase() === "content-type",
+              );
+              if (!hasContentType && rawType)
+                parts.push(`-H "Content-Type: ${rawType}"`);
+              parts.push(`-d ${shellEscape(body)}`);
+            }
+          }
+        }
 
-// ── Format toggle ─────────────────────────────────────────────────────────────
-function toggleFormat() {
-  multiline = !multiline;
-  document.getElementById('btnFormat').classList.toggle('active', multiline);
-  generate();
-}
+        currentRawCurl = parts.join(sep);
+        renderOutput(currentRawCurl, method, url);
+        updateHints({ method, baseUrl, headers, authType, bodyType, url });
+      }
 
-// ── Copy ─────────────────────────────────────────────────────────────────────
-function copyOutput() {
-  const el  = document.getElementById('output');
-  const txt = el.innerText;
-  if (!txt || txt.includes('Fill in') || txt.includes('Enter a')) return;
-  navigator.clipboard.writeText(txt).then(()=>{
-    const btn = document.getElementById('btnCopy');
-    btn.textContent = 'Copied!'; btn.classList.add('copied');
-    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); }, 2000);
-  });
-}
+      // ── FIXED SYNTAX HIGHLIGHT RENDERER ───────────────────────────────────────────
+      function renderOutput(raw, method, url) {
+        if (!raw) return;
 
-// ── Reset ─────────────────────────────────────────────────────────────────────
-function resetAll() {
-  document.getElementById('baseUrl').value   = '';
-  document.getElementById('endpoint').value  = '';
-  document.getElementById('method').value    = 'GET';
-  document.getElementById('method').className = 'method-select GET';
-  document.getElementById('queryList').innerHTML  = '';
-  document.getElementById('headerList').innerHTML = '';
-  document.getElementById('authFields').innerHTML = '';
-  document.getElementById('bodyFields').innerHTML = '';
-  document.querySelectorAll('.auth-pill').forEach(p=>p.classList.toggle('active',p.dataset.auth==='none'));
-  document.querySelectorAll('.body-tab').forEach(t=>t.classList.toggle('active',t.dataset.body==='none'));
-  document.querySelectorAll('.option-item input[type=checkbox]').forEach(c=>c.checked=false);
-  authType='none'; bodyType='none'; multiline=false;
-  document.getElementById('btnFormat').classList.remove('active');
-  document.getElementById('output').innerHTML='<span style="color:var(--text3);font-style:italic">Fill in the fields on the left to generate your curl command...</span>';
-  document.getElementById('hintsList').innerHTML='<div class="hint-item info"><span class="hint-icon">ℹ️</span><span class="hint-text">Start building your request to see best practice suggestions.</span></div>';
-  document.getElementById('hintCount').textContent='—';
-}
+        // 1. Amankan entitas dasar HTML agar tidak diparsing sebagai tag oleh browser
+        let html = raw
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-generate();
-</script>
-</body>
+        // 2. Warnai kata "curl" di awalan (aman, belum ada span lain)
+        html = html.replace(/^curl\b/, '<span class="token-curl">curl</span>');
+
+        // 3. (PERBAIKAN BUG) Warnai parameter (flags) SEPERTI -X atau --data
+        // Menambahkan (^|\s) memastikan strip (-) hanya bereaksi jika sebelumnya adalah AWAL baris atau SPASI.
+        // Ini mencegah Regex menyambar atribut HTML (seperti class="token-flag") atau kata di tengah teks (seperti corporate-id).
+        html = html.replace(
+          /(^|\s)(--?[\w-]+)/g,
+          '$1<span class="token-flag">$2</span>',
+        );
+
+        // 4. Warnai pasangan Header ("Key: Value") di dalam tanda kutip
+        html = html.replace(
+          /"([^"]+?):\s([^"]*?)"/g,
+          '"<span class="token-header">$1</span>: <span class="token-value">$2</span>"',
+        );
+
+        // 5. Warnai URL string
+        const safeUrl = url
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        const regexUrl = safeUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        html = html.replace(
+          new RegExp(`"${regexUrl}"`, "g"),
+          `"<span class="token-url">${safeUrl}</span>"`,
+        );
+
+        // 6. Highlight pemisah multiline (\)
+        html = html.replace(/(\\$)/gm, '<span class="token-cont">\\</span>');
+
+        document.getElementById("output").innerHTML = html;
+      }
+
+      // ── Local Storage History ─────────────────────────────────────────────────────
+      function saveCurrentCurl() {
+        if (!currentRawCurl || currentRawCurl === "curl") return;
+
+        let history = JSON.parse(localStorage.getItem("curlHistory") || "[]");
+
+        if (history.length > 0 && history[0].curl === currentRawCurl) {
+          animateSaveBtn();
+          return;
+        }
+
+        history.unshift({
+          url:
+            document.getElementById("baseUrl").value +
+            document.getElementById("endpoint").value,
+          method: document.getElementById("method").value,
+          curl: currentRawCurl,
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        });
+
+        if (history.length > 15) history.pop();
+        localStorage.setItem("curlHistory", JSON.stringify(history));
+
+        renderHistory();
+        animateSaveBtn();
+      }
+
+      function renderHistory() {
+        const history = JSON.parse(localStorage.getItem("curlHistory") || "[]");
+        const list = document.getElementById("historyList");
+        if (history.length === 0) {
+          list.innerHTML =
+            '<div class="hint-item info"><span class="hint-icon">📂</span><span class="hint-text">No saved cURLs yet. Click "Save" above to store.</span></div>';
+          return;
+        }
+
+        list.innerHTML = history
+          .map(
+            (h, i) => `
+      <div class="hint-item clickable" style="flex-direction:column; align-items:flex-start; gap:4px; cursor:pointer;" onclick="copyHistory(${i}, this)" title="Click to copy">
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:10px; color:var(--text3);">
+              <span style="color:var(--accent); font-weight:bold;">${h.method}</span>
+              <span>${h.time}</span>
+          </div>
+          <div style="font-family:var(--mono); font-size:11px; color:var(--text2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">
+              ${h.url}
+          </div>
+      </div>
+  `,
+          )
+          .join("");
+      }
+
+      function copyHistory(index, element) {
+        const history = JSON.parse(localStorage.getItem("curlHistory") || "[]");
+        if (history[index]) {
+          navigator.clipboard.writeText(history[index].curl).then(() => {
+            const originalBg = element.style.background;
+            element.style.background = "rgba(0, 208, 132, 0.1)";
+            setTimeout(() => (element.style.background = originalBg), 500);
+          });
+        }
+      }
+
+      function clearHistory() {
+        localStorage.removeItem("curlHistory");
+        renderHistory();
+      }
+
+      function animateSaveBtn() {
+        const btn = document.getElementById("btnSave");
+        btn.textContent = "Saved!";
+        btn.classList.add("saved");
+        setTimeout(() => {
+          btn.textContent = "Save";
+          btn.classList.remove("saved");
+        }, 2000);
+      }
+
+      // ── Buttons Action ─────────────────────────────────────────────────────────────
+      function toggleFormat() {
+        multiline = !multiline;
+        document
+          .getElementById("btnFormat")
+          .classList.toggle("active", multiline);
+        generate();
+      }
+
+      function copyOutput() {
+        const el = document.getElementById("output");
+        const txt = el.innerText;
+        if (!txt || txt.includes("Fill in") || txt.includes("Enter a")) return;
+        navigator.clipboard.writeText(txt).then(() => {
+          const btn = document.getElementById("btnCopy");
+          btn.textContent = "Copied!";
+          btn.classList.add("copied");
+          saveCurrentCurl();
+          setTimeout(() => {
+            btn.textContent = "Copy";
+            btn.classList.remove("copied");
+          }, 2000);
+        });
+      }
+
+      function resetAll() {
+        document.getElementById("baseUrl").value = "";
+        document.getElementById("endpoint").value = "";
+        document.getElementById("method").value = "GET";
+        document.getElementById("method").className = "method-select GET";
+        document.getElementById("queryList").innerHTML = "";
+        document.getElementById("headerList").innerHTML = "";
+        document.getElementById("authFields").innerHTML = "";
+        document.getElementById("bodyFields").innerHTML = "";
+        document
+          .querySelectorAll(".auth-pill")
+          .forEach((p) =>
+            p.classList.toggle("active", p.dataset.auth === "none"),
+          );
+        document
+          .querySelectorAll(".body-tab")
+          .forEach((t) =>
+            t.classList.toggle("active", t.dataset.body === "none"),
+          );
+        document
+          .querySelectorAll(".option-item input[type=checkbox]")
+          .forEach((c) => (c.checked = false));
+        authType = "none";
+        bodyType = "none";
+        multiline = false;
+        document.getElementById("btnFormat").classList.remove("active");
+        document.getElementById("output").innerHTML =
+          '<span style="color:var(--text3);font-style:italic">Fill in the fields on the left to generate your curl command...</span>';
+        updateHints([]);
+        currentRawCurl = "";
+      }
+
+      function updateHints({
+        method,
+        baseUrl,
+        headers,
+        authType,
+        bodyType,
+        url,
+      }) {
+        const hints = [];
+        if (baseUrl && baseUrl.startsWith("http://"))
+          hints.push({
+            type: "warn",
+            icon: "⚠️",
+            text: "Using HTTP — consider switching to HTTPS",
+          });
+        else if (baseUrl && baseUrl.startsWith("https://"))
+          hints.push({ type: "ok", icon: "✓", text: "Using HTTPS — good!" });
+
+        if (document.getElementById("opt_insecure")?.checked)
+          hints.push({
+            type: "warn",
+            icon: "⚠️",
+            text: "--insecure skips SSL verification",
+          });
+        if (authType === "none" && method !== "GET")
+          hints.push({
+            type: "info",
+            icon: "💡",
+            text: "No auth set — add authentication if protected",
+          });
+
+        const list = document.getElementById("hintsList");
+        document.getElementById("hintCount").textContent =
+          `${hints.length} hints`;
+        if (!hints.length)
+          list.innerHTML =
+            '<div class="hint-item ok"><span class="hint-icon">✓</span><span class="hint-text">Looks good!</span></div>';
+        else
+          list.innerHTML = hints
+            .map(
+              (h) =>
+                `<div class="hint-item ${h.type}"><span class="hint-icon">${h.icon}</span><span class="hint-text">${h.text}</span></div>`,
+            )
+            .join("");
+      }
+
+      // ── Init ──────────────────────────────────────────────────────────────────────
+      generate();
+      renderHistory();
+    </script>
+  </body>
 </html>
